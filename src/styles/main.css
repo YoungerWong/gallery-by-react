@@ -44,6 +44,11 @@ html, body{
   transform-style: preserve-3d;
   transition: transform .6s ease-in-out, left .6s ease-in-out, top .6s ease-in-out;
   z-index: 10;
+  text-align: center;
+}
+.img-figure img{
+  max-width: 100%;
+  max-height: 100%;
 }
 .is-inverse{
   transform: translate(320px) rotateY(180deg);
@@ -52,7 +57,7 @@ figcaption {
   text-align: center;
 }
 figcaption .img-title{
-  margin: 20px 0 0 0;
+  margin: 10px 0 0 0;
   color: #a7a0a2;
   font-size: 16px;
 }
