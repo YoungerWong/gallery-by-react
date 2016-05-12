@@ -44,10 +44,12 @@ var ImgFigure = React.createClass({
 			styleObj = this.props.arrange.pos;
 		}
 		if(this.props.arrange.rotate) {
-			styleObj['transform'] = 'rotate(' + this.props.arrange.rotate + 'deg)';
+			['MozTransform', 'msTransform', 'WebkitTransform', 'transform'].forEach(function(value){
+				styleObj[value] = 'rotate(' + this.props.arrange.rotate + 'deg)';
+			}.bind(this));
 		}
 		if(this.props.arrange.isCenter) {
-			styleObj['z-index'] = 11;
+			styleObj['zIndex'] = 11;
 		}
 		var imgFigureClassName = 'img-figure';
 		imgFigureClassName += this.props.arrange.isInverse ? ' is-inverse' : '';
@@ -66,6 +68,30 @@ var ImgFigure = React.createClass({
 		)
 	}
 });
+var ControllerUnit = React.createClass({
+	handleClick: function(e) {
+		if(this.props.arrange.isCenter) {
+			this.props.inverse();
+		} else {
+			this.props.center();
+		}
+
+		e.stopPropagation();
+		e.preventDefault();
+	},
+	render: function() {
+		var controllerUnitClassName = 'controller-unit';
+		if(this.props.arrange.isCenter) {
+			controllerUnitClassName += ' is-center';
+			if(this.props.arrange.isInverse) {
+				controllerUnitClassName += ' is-inverse';
+			}
+		}
+		return (
+			<span className={controllerUnitClassName} onClick={this.handleClick}></span>
+		)
+	}
+})
 var GalleryByReactApp = React.createClass({
 	Constant: {
 		centerPos: {
@@ -113,7 +139,7 @@ var GalleryByReactApp = React.createClass({
 			vPosRangeTopY = vPosRange.topY,
 
 			imgsArrangeTopArr = [],
-			topImgNum = Math.ceil(Math.random() * 2), //取一个或者不取
+			topImgNum = Math.floor(Math.random() * 2), //取一个或者不取
 			topImgSpliceIndex = 0,
 			imgsArrangeCenterArr = imgsArrangeArr.splice(centerIndex, 1);
 			// 首先居中 centerIndex 图片 居中的图片不需要旋转
@@ -234,6 +260,7 @@ var GalleryByReactApp = React.createClass({
   			}
   		}
   		imgFigures.push(<ImgFigure data={value} key={'imgFigure'+index} ref={'imgFigure'+index} arrange={this.state.imgsArrangeArr[index]} inverse={this.inverse(index)} center={this.center(index)}/>);
+  		controllerUnits.push(<ControllerUnit key={'controller'+index} arrange={this.state.imgsArrangeArr[index]} inverse={this.inverse(index)} center={this.center(index)}/>);
   	}.bind(this));
     return (
     	<section className="stage" ref="stage">
